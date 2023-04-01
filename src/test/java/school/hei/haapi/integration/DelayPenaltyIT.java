@@ -83,5 +83,28 @@ class DelayPenaltyIT {
         CreateDelayPenaltyChange toCreate4 = createDelayPenaltyChange1().interestPercent(null);
         DelayPenalty expected = api.getDelayPenalty();
 
+        ApiException exception1 = assertThrows(ApiException.class,
+                () -> api.createDelayPenaltyChange(toCreate1));
+        ApiException exception2 = assertThrows(ApiException.class,
+                () -> api.createDelayPenaltyChange(toCreate2));
+        ApiException exception3 = assertThrows(ApiException.class,
+                () -> api.createDelayPenaltyChange(toCreate3));
+        ApiException exception4 = assertThrows(ApiException.class,
+                () -> api.createDelayPenaltyChange(toCreate4));
+
+
+        DelayPenalty actual = api.getDelayPenalty();
+        assertEquals(expected, actual);
+        assertTrue(expected.equals(actual));
+        String exceptionMessage1 = exception1.getMessage();
+        String exceptionMessage2 = exception2.getMessage();
+        String exceptionMessage3 = exception3.getMessage();
+        String exceptionMessage4 = exception4.getMessage();
+
+        assertTrue(exceptionMessage1.contains("Grace delay is mandatory"));
+        assertTrue(exceptionMessage2.contains("interestPercent is madatory"));
+        assertTrue(exceptionMessage3.contains("applicabilityDelayAfterGrace is mandatory"));
+        assertTrue(exceptionMessage4.contains("interestTimerate is mandatory"));
+
     }
 }
